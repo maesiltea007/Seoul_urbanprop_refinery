@@ -1,0 +1,41 @@
+# Seoul_urbanprop_refinery
+
+A data pipeline for cleaning and integrating **MOLIT (Ministry of Land, Infrastructure and Transport)** building register datasets — **표제부 (Main Register)** and **총괄표제부 (Comprehensive Register)** files
+
+
+
+## Usage
+
+1. input/ 폴더에 해당 파일들을 아래와 같이 저장합니다
+   - 표제부 : '일반{년도}.txt'
+   - 종합표제부 : '총괄{년도}.txt'
+   example) '총괄25.txt'
+
+2. ipynb 파일을 실행하면 output/ 폴더에 엑셀 형식으로 병합된 파일이 저장됩니다
+
+
+
+## Notebooks
+
+### 1.국토부-표제부-총괄표제부-병합.ipynb
+   :표제부와 총괄표제부를 병합합니다
+   - 서울시 건축물 데이터만 필터링합니다
+   - 같은 필지 내에 여러 건축물이 있지만 총괄표제부에는 등록돼 있지 않은 건축물들의 총괄표제부 형식의 데이터를 생성합니다
+     '건축물대장PK'에는 임의의 값을 넣습니다
+   - 총괄표제부 중 연면적, 대지면적이 누락된 데이터는 같은 주소를 가지는 표제부를 이용해 계산합니다
+     대지면적은 해당 주소에 있는 표제부들의 대지면적 중 가장 큰 값으로 계산합니다
+   - '그룹종류' 컬럼을 추가합니다
+     0: 총괄표제부
+     1: 총괄표제부를 가지는 표제부
+     2: 일반 표제부
+
+### 2.병합된-건축물대장-정제.ipynb
+   :연구에 필요하지 않은 칼럼을 제거합니다
+
+### 3.그룹종류-따라-디자인-추가.ipynb
+
+
+
+## Reference
+
+This project is hardly based on the original code by GwanBin Park (Chung-Ang University, SoftWare Department)
