@@ -2,3 +2,7 @@ input/*
 interim/*
 output/*
 etc/data
+
+!input/.gitkeep
+!interim/.gitkeep
+!output/.gitkeep
