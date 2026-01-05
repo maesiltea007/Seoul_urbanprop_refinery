@@ -1,1 +1,0 @@
-# kapt-blds-merger
