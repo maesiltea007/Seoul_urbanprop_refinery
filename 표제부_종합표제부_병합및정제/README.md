@@ -1,6 +1,6 @@
-# Seoul_urbanprop_refinery
+# 표제부_종합표제부_병합및정제
 
-A data pipeline for cleaning and integrating **MOLIT (Ministry of Land, Infrastructure and Transport)** building register datasets — **표제부 (Main Register)** and **총괄표제부 (Comprehensive Register)** files
+국토부 표제부와 총괄표제부를 concat병합합니다
 
 
 
