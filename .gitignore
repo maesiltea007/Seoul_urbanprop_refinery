@@ -1,7 +1,7 @@
 input/*
 interim/*
 output/*
-etc/data
+etc/*
 
 !input/.gitkeep
 !interim/.gitkeep
