@@ -9,7 +9,7 @@ def norm_to_str(val):
 
 
 ############ 컬럼병합 함수 ############
-def merge_columns(
+def merge_col_values(
     vals: list      # 병합할 컬럼값 리스트
     ) -> list[str]: # 병합된 컬럼값 리스트
     
@@ -45,7 +45,7 @@ def merge_cols_and_place(
     df = df.drop(columns=source_cols)       # 원본 테이블의 병합할 컬럼들은 삭제
     
     df[merged_cols] = source_cols_df.apply( # 병합
-        lambda row: merge_columns([row[col] for col in source_cols]),
+        lambda row: merge_col_values([row[col] for col in source_cols]),
         axis=1,
         result_type='expand'
     )
@@ -63,4 +63,42 @@ def merge_cols_and_place(
 def column_merge(df, column_merge_rules):
     for cols_to_merge, cols_after_merge in column_merge_rules:
         df = merge_cols_and_place(df, cols_to_merge, cols_after_merge)
+    return df
+
+
+
+
+############ 병합종류 컬럼병합 ############
+def merge_병합종류_values(
+    vals1: str,
+    vals2: str
+    ) -> str:
+    vals1, vals2 = norm_to_str(vals1), norm_to_str(vals2)
+    
+    if vals1=='': return vals2
+    if vals2=='': return vals1
+    
+    set1 = {v.strip() for v in vals1.split(',') if v.strip()}
+    set2 = {v.strip() for v in vals2.split(',') if v.strip()}
+    merged_vals = set1|set2 # 합집합
+    merged_vals = sorted(   # sort
+        merged_vals,
+        key=lambda val: int(val.replace('번', ''))
+    )
+    
+    return ','.join(merged_vals)
+
+def merge_병합종류(
+    df: pd.DataFrame,
+    col1: str,
+    col2: str
+    ) -> pd.DataFrame:
+    
+    df['병합종류'] = df.apply(  # 두 테이블의 병합종류 컬럼을 병합, 새로운 병합종류 컬럼 생성
+        lambda row: merge_병합종류_values(row[col1], row[col2]),
+        axis=1
+    )
+    
+    # 일관성을 위해 여기서 컬럼의 위치를 조정하거나 드랍하지 않음
+    
     return df
