@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+from itertools import chain
 
 
 
@@ -61,8 +62,9 @@ def merge_cols_and_place(
 
 
 def column_merge(df, column_merge_rules):
-    for cols_to_merge, cols_after_merge in column_merge_rules:
-        df = merge_cols_and_place(df, cols_to_merge, cols_after_merge)
+    for source_column_rule, merged_columns in column_merge_rules:
+        source_columns = list(chain.from_iterable(source_column_rule))
+        df = merge_cols_and_place(df,  source_columns, merged_columns)
     return df
 
 
