@@ -2,6 +2,7 @@ input/*
 interim/*
 output/*
 etc/*
+utils/__pycache__
 
 !input/.gitkeep
 !interim/.gitkeep
