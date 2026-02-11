@@ -9,6 +9,41 @@ def norm_to_str(val):
 
 
 
+############ 전처리 ############
+
+# 컬럼병합할 컬럼의 이름이 완전 동일할 경우 suffix 추가하여 구분
+def suffix_conflictin_columns(
+    df1 : pd.DataFrame, 
+    df2 : pd.DataFrame, 
+    suffix1 : str, 
+    suffix2 : str, 
+    column_merge_rules : list) -> pd.DataFrame:
+    
+    for source_column_rule, merged_columns in column_merge_rules:
+        df1_source_cols, df2_source_cols = source_column_rule
+        
+        common = set(df1_source_cols) & set(df2_source_cols)
+        if not common: continue
+        
+        suffixed_df1_source_cols = [
+            f"{c}{suffix1}" if c in common else c
+            for c in df1_source_cols
+        ]
+        suffixed_df2_source_cols = [
+            f"{c}{suffix2}" if c in common else c
+            for c in df2_source_cols
+        ]
+        
+        # change column_merge_rules
+        source_column_rule[0] = suffixed_df1_source_cols
+        source_column_rule[1] = suffixed_df2_source_cols
+        
+        # rename actual columns in dataframes
+        df1 = df1.rename(columns=dict(zip(df1_source_cols,suffixed_df1_source_cols)))
+        df2 = df2.rename(columns=dict(zip(df2_source_cols,suffixed_df2_source_cols)))
+        return df1, df2
+
+
 ############ 컬럼병합 함수 ############
 def merge_col_values(
     vals: list      # 병합할 컬럼값 리스트
