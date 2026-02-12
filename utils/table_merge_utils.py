@@ -1,6 +1,8 @@
 import pandas as pd
 import re
 
+from utils.column_merge_utils import merge_cols_and_place
+
 def parse_legal_addr(
     addr : str      # 파싱할 주소
     ) -> list[str]: # 리스트로 파싱
@@ -93,3 +95,54 @@ def parse_street_addr(
 
 
 
+def merge_two_df(
+    df1: pd.DataFrame,
+    df2: pd.DataFrame,
+    on_list: list[str]
+    ):
+    suffix = 'suffix'
+    
+    merged = df1.merge( # OUTER JOIN
+        df2,
+        on = on_list,
+        how='outer',
+        suffixes=('',suffix),   # 컬럼명이 같은 경우 suffix 붙임
+        indicator=True          # ['_merge'] 컬럼 추가
+    )
+    
+    cols_to_column_merge = {c.removesuffix(suffix):c for c in merged.columns if c.endswith(suffix)}
+    for col1, col2 in cols_to_column_merge.items():
+        merged = merge_cols_and_place(merged, [col1,col2],[col1])
+    
+    matched = ( # 양쪽 매칭에 성공한 것
+        merged.loc[merged['_merge']=='both']
+        .drop(columns=['_merge'])
+        .copy()
+    )
+    left_merged = ( # LEFT JOIN
+        merged.loc[merged['_merge']=='left']
+        .drop(columns=['_merge'])
+        .copy()
+    )
+    right_merged = (# RIGHT JOIN
+        merged.loc[merged['_merge']=='right']
+        .drop(columns=['_merge'])
+        .copy()
+    )
+    
+    unmatched_df1 = (   # 매칭에 실패한 데이터
+        merged.loc[merged['_merge']=='left_only']
+        .copy()
+    )
+    unmatched_df1 = unmatched_df1.drop( # 원본 테이블의 형식으로 되돌리기
+        columns=[c for c in unmatched_df1.columns if c not in df1.columns]
+    )
+    unmatched_df2 = (
+        merged.loc[merged['_merge']=='right_only']
+        .copy()
+    )
+    unmatched_df2 = unmatched_df2.drop(
+        columns=[c for c in unmatched_df2.columns if c not in df2.columns]
+    )
+    
+    return merged, matched, left_merged, right_merged, unmatched_df1, unmatched_df2

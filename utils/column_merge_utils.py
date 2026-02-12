@@ -17,7 +17,7 @@ def suffix_conflictin_columns(
     df2 : pd.DataFrame, 
     suffix1 : str, 
     suffix2 : str, 
-    column_merge_rules : list) -> pd.DataFrame:
+    column_merge_rules : list):
     
     for source_column_rule, merged_columns in column_merge_rules:
         df1_source_cols, df2_source_cols = source_column_rule
@@ -41,7 +41,8 @@ def suffix_conflictin_columns(
         # rename actual columns in dataframes
         df1 = df1.rename(columns=dict(zip(df1_source_cols,suffixed_df1_source_cols)))
         df2 = df2.rename(columns=dict(zip(df2_source_cols,suffixed_df2_source_cols)))
-        return df1, df2
+        
+    return df1, df2
 
 
 ############ 컬럼병합 함수 ############
