@@ -98,7 +98,7 @@ def parse_street_addr(
 def merge_two_df(
     df1: pd.DataFrame,
     df2: pd.DataFrame,
-    on_list: list[str]
+    on_list: list[str]  # 병합의 기준이 되는 컬럼
     ):
     suffix = 'suffix'
     

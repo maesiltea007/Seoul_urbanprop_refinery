@@ -66,7 +66,7 @@ def merge_col_values(
 def merge_cols_and_place(
     df: pd.DataFrame,
     source_cols: list,  # 병합할 컬럼명 리스트
-    merged_cols: list   # 결과 컬럼명 리스트
+    merged_cols: list   # 병합된 컬럼명 리스트
     ) -> pd.DataFrame:
 
     cols_to_remain = merged_cols.copy()             # 병합된 컬럼 중 결과 테이블에 남길 컬럼명 리스트
@@ -137,6 +137,7 @@ def merge_병합종류(
         axis=1
     )
     
-    # 일관성을 위해 여기서 컬럼의 위치를 조정하거나 드랍하지 않음
+    # 컬럼 드랍, 컬럼 위치 변경은 여기서 실행하지 않음. 
+    # run하는 파일의 "테이블 정리" 단계에서 실행함.
     
     return df
