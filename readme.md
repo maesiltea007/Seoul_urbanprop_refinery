@@ -37,4 +37,7 @@
 | output/apt_blds_병합.csv (3번 과정 결과파일) | input/blds.csv|
 | 서룰시공공주택아파트정보  |  input/units_summary.xlsx  |
 
-파일명을 위와 같이 변경한 후 코드 실행
+파일명을 위와 같이 변경한 후 코드 실행하면 output/final.csv 파일 생성
+
+### 5(optional). post_processing
+최종 파일(final.csv)에서 1번(blds.csv)이 포함되지 않은 row는 전부 드랍
